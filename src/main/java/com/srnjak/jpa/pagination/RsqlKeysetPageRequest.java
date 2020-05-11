@@ -49,7 +49,7 @@ public class RsqlKeysetPageRequest implements KeysetPageRequest {
      */
     @Builder.Default
     @NonNull
-    Integer limit = 20;
+    Integer limit = DEFAULT_LIMIT;
 
     /**
      * Direction to search of data after
