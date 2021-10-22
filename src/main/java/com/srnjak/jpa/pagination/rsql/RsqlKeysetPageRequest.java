@@ -1,17 +1,18 @@
-package com.srnjak.jpa.pagination;
+package com.srnjak.jpa.pagination.rsql;
 
 import com.github.tennaito.rsql.jpa.JpaPredicateVisitor;
+import com.srnjak.jpa.pagination.Direction;
+import com.srnjak.jpa.pagination.KeysetPageRequest;
+import com.srnjak.jpa.pagination.rsql.parser.*;
 import com.srnjak.sortbox.bean.BeanSortBox;
 import com.srnjak.sortbox.bean.plugins.CompactSort;
 import cz.jirutka.rsql.parser.RSQLParser;
-import cz.jirutka.rsql.parser.ast.Node;
-import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import lombok.*;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -60,6 +61,12 @@ public class RsqlKeysetPageRequest implements KeysetPageRequest {
     Direction direction = Direction.FORWARD;
 
     /**
+     * The custom argument parser.
+     */
+    @Singular
+    List<ValueParser<?>> customParsers;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -81,14 +88,19 @@ public class RsqlKeysetPageRequest implements KeysetPageRequest {
     @Override
     public Predicate getQuery(Root<?> root, EntityManager em) {
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        var cb = em.getCriteriaBuilder();
 
         return Optional.ofNullable(this.filter)
                 .map(q -> {
-                    RSQLVisitor<Predicate, EntityManager> visitor =
-                            new JpaPredicateVisitor<>().defineRoot(root);
+                    var visitor = new JpaPredicateVisitor<>().defineRoot(root);
 
-                    Node rootNode = new RSQLParser().parse(this.filter);
+                    var argumentParser = new DefaultArgumentParser()
+                            .withParsers(
+                                    customParsers.toArray(new ValueParser[]{}));
+
+                    visitor.getBuilderTools().setArgumentParser(argumentParser);
+
+                    var rootNode = new RSQLParser().parse(this.filter);
                     return rootNode.accept(visitor, em);
                 })
                 .orElse(cb.conjunction());
