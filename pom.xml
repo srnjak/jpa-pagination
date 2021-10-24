@@ -67,7 +67,7 @@
         <dependency>
             <groupId>com.srnjak</groupId>
             <artifactId>sortbox</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- Rsql -->
