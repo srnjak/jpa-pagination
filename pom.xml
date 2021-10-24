@@ -6,7 +6,7 @@
 
     <groupId>com.srnjak</groupId>
     <artifactId>jpa-pagination</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>jpa-pagination</name>
     <description>The JPA utility for pagination.</description>
