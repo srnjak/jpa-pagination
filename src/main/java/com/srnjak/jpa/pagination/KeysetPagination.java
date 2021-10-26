@@ -127,7 +127,8 @@ public class KeysetPagination<Y> {
         // Get predicate for search the start of the result set depends on sort.
         Predicate startPredicate = Optional.ofNullable(pageRequest.getAfter())
                 .map(s -> {
-                    Y after = em.find(aClass, s);
+                    Y after = Optional.ofNullable(em.find(aClass, s))
+                            .orElseThrow(() -> new AfterNotFoundException(s));
 
                     return buildAfterPredicate(
                             beanSortBox,
