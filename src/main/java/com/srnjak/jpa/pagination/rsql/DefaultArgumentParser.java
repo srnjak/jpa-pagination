@@ -78,15 +78,16 @@ public class DefaultArgumentParser implements ArgumentParser {
 
         var parser = parsers.get(type);
 
-        if (parser == null) {
-            //noinspection unchecked,rawtypes
-            return (T) Optional.of(type)
-                    .filter(Class::isEnum)
-                    .map(t -> Enum.valueOf((Class<Enum>) t, argument))
-                    .orElseThrow(() -> new IllegalArgumentException(argument));
-        }
-
         try {
+            if (parser == null) {
+                //noinspection unchecked,rawtypes
+                return (T) Optional.of(type)
+                        .filter(Class::isEnum)
+                        .map(t -> Enum.valueOf((Class<Enum>) t, argument))
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(argument));
+            }
+
             //noinspection unchecked
             return (T) parser.parse(argument);
         } catch (RuntimeException e) {
