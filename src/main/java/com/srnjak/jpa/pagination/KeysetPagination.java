@@ -93,13 +93,14 @@ public class KeysetPagination<Y> {
      * @param em Entity manager
      */
     public KeysetPagination(Class<Y> aClass, EntityManager em) {
-        this.em = em;
-        this.cb = em.getCriteriaBuilder();
 
         this.aClass = aClass;
 
+        this.em = em;
+        this.cb = em.getCriteriaBuilder();
         this.criteria = cb.createQuery(aClass);
         this.root = criteria.from(aClass);
+
         this.additionalFilter = (cb, root) -> cb.conjunction();
     }
 
