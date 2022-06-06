@@ -2,9 +2,9 @@ package com.srnjak.jpa.pagination;
 
 import com.srnjak.sortbox.bean.BeanSortBox;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 /**
  * Page request for keyset pagination.
